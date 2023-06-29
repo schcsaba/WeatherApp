@@ -3,22 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/text_view_no_internet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
     <LinearLayout
+        android:id="@+id/linear_layout_head"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:background="@color/background_orange"
         android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/text_view_city_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
-            android:text="@string/city_name"
             android:textColor="@color/white"
             android:textSize="36sp" />
 
@@ -58,12 +65,14 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/button_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:backgroundTint="?attr/colorSecondary"
         android:text="@string/favorites"
         android:textAllCaps="true"
-        android:layout_margin="10dp" />
+        android:layout_margin="16dp" />
 </RelativeLayout>

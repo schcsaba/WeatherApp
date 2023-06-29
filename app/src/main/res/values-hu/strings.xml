@@ -6,4 +6,5 @@
     <string name="city_temp">24°C</string>
     <string name="sun_icon">Nap ikon</string>
     <string name="favorites">Kedvencek</string>
+    <string name="no_internet_connection">Nincs internet kapcsolat</string>
 </resources>

@@ -6,4 +6,5 @@
     <string name="city_temp">24°C</string>
     <string name="sun_icon">Icône du soleil</string>
     <string name="favorites">Favoris</string>
+    <string name="no_internet_connection">Pas de connexion Internet</string>
 </resources>
