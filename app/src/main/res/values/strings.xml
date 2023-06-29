@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Weather App</string>
     <string name="city_name">New York</string>
-    <string name="city_desc">Ensoleillé</string>
+    <string name="city_desc">Sunny</string>
     <string name="city_temp">24°C</string>
     <string name="sun_icon">Sun icon</string>
+    <string name="favorites">Favorites</string>
 </resources>
