@@ -7,4 +7,8 @@
     <string name="sun_icon">Nap ikon</string>
     <string name="favorites">Kedvencek</string>
     <string name="no_internet_connection">Nincs internet kapcsolat</string>
+    <string name="title_activity_favorite">Kedvencek</string>
+    <string name="large_text">Üzenet</string>
+    <string name="action_settings">Beállítások</string>
+    <string name="message">"Üzenet: "</string>
 </resources>

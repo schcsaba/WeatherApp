@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginStart="15dp"
+            android:layout_marginBottom="15dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -61,8 +62,14 @@
                 android:textColor="@color/white"
                 android:textSize="60sp" />
         </LinearLayout>
-
     </LinearLayout>
+
+    <EditText
+        android:id="@+id/edit_text_message"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:hint="Your Message"/>
 
     <Button
         android:id="@+id/button_favorites"
@@ -73,6 +80,7 @@
         android:layout_alignParentEnd="true"
         android:backgroundTint="?attr/colorSecondary"
         android:text="@string/favorites"
+        android:onClick="onClickButton"
         android:textAllCaps="true"
         android:layout_margin="16dp" />
 </RelativeLayout>
