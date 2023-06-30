@@ -9,41 +9,31 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextViewCityName;
-    private LinearLayout mLinearLayoutHead;
-    private Button mButtonFavorites;
-    private TextView mTextViewNoInternet;
-    private EditText mEditTextMessage;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mTextViewCityName = findViewById(R.id.text_view_city_name);
-        mTextViewCityName.setText(R.string.city_name);
-        mLinearLayoutHead = findViewById(R.id.linear_layout_head);
-        mButtonFavorites = findViewById(R.id.button_favorites);
-        mTextViewNoInternet = findViewById(R.id.text_view_no_internet);
-        mTextViewNoInternet.setText(R.string.no_internet_connection);
-        mEditTextMessage = findViewById(R.id.edit_text_message);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.textViewCityName.setText(R.string.city_name);
+        binding.textViewNoInternet.setText(R.string.no_internet_connection);
 
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             Log.d("TAG", "Oui je suis connecté");
-            mTextViewNoInternet.setVisibility(View.INVISIBLE);
+            binding.textViewNoInternet.setVisibility(View.INVISIBLE);
         } else {
             Log.d("TAG", "Non j'ai rien du tout");
-            mLinearLayoutHead.setVisibility(View.INVISIBLE);
-            mButtonFavorites.setVisibility(View.INVISIBLE);
-            mTextViewNoInternet.setVisibility(View.VISIBLE);
+            binding.linearLayoutHead.setVisibility(View.INVISIBLE);
+            binding.buttonFavorites.setVisibility(View.INVISIBLE);
+            binding.textViewNoInternet.setVisibility(View.VISIBLE);
         }
         Log.d("TAG", "MainActivity: onCreate()");
     }
@@ -85,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickButtonFavorites(View view) {
-        String message = mEditTextMessage.getText().toString();
+        String message = binding.editTextMessage.getText().toString();
         Intent intent = new Intent(this, FavoriteActivity.class);
         intent.putExtra(Keys.MESSAGE_KEY, message);
         startActivity(intent);

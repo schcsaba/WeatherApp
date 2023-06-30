@@ -10,15 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import fr.csaba.android.weatherapp.databinding.ActivityFavoriteBinding;
 
 public class FavoriteActivity extends AppCompatActivity {
 
     private ActivityFavoriteBinding binding;
-    private TextView mTextViewMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +36,7 @@ public class FavoriteActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String strMessage = extras.getString(Keys.MESSAGE_KEY);
-            mTextViewMessage = findViewById(R.id.text_view_message);
-            mTextViewMessage.setText(String.format("%s%s", getString(R.string.message), strMessage));
+            binding.include.textViewMessage.setText(String.format("%s%s", getString(R.string.message), strMessage));
         }
         Log.d("TAG", "FavoriteActivity: onCreate()");
     }
