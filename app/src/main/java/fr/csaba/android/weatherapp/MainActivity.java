@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("TAG", "MainActivity: onStop()");
     }
 
-    public void onClickButton(View view) {
+    public void onClickButtonFavorites(View view) {
         String message = mEditTextMessage.getText().toString();
         Intent intent = new Intent(this, FavoriteActivity.class);
         intent.putExtra(Keys.MESSAGE_KEY, message);

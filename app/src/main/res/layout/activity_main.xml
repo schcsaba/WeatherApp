@@ -80,7 +80,7 @@
         android:layout_alignParentEnd="true"
         android:backgroundTint="?attr/colorSecondary"
         android:text="@string/favorites"
-        android:onClick="onClickButton"
+        android:onClick="onClickButtonFavorites"
         android:textAllCaps="true"
         android:layout_margin="16dp" />
 </RelativeLayout>
