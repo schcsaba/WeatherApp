@@ -36,15 +36,12 @@ public class FavoriteActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
-        String strMessage = "";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            strMessage = extras.getString(Keys.MESSAGE_KEY);
+            String strMessage = extras.getString(Keys.MESSAGE_KEY);
+            mTextViewMessage = findViewById(R.id.text_view_message);
+            mTextViewMessage.setText(String.format("%s%s", getString(R.string.message), strMessage));
         }
-
-        mTextViewMessage = findViewById(R.id.text_view_message);
-        mTextViewMessage.setText(String.format("%s%s", getString(R.string.message), strMessage));
-
         Log.d("TAG", "FavoriteActivity: onCreate()");
     }
 
