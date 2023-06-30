@@ -1,4 +1,4 @@
-package fr.csaba.android.weatherapp;
+package fr.csaba.android.weatherapp.activities;
 
 import android.os.Bundle;
 
@@ -11,6 +11,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 
+import fr.csaba.android.weatherapp.Keys;
+import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityFavoriteBinding;
 
 public class FavoriteActivity extends AppCompatActivity {
