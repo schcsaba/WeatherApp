@@ -45,6 +45,7 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
         app:tint="@color/white"
-        app:srcCompat="@drawable/baseline_search_24" />
+        app:srcCompat="@drawable/baseline_search_24"
+        android:contentDescription="Search icon" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

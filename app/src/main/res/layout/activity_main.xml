@@ -66,13 +66,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/edit_text_message"
-        android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:hint="Your Message"/>
-
     <Button
         android:id="@+id/button_favorites"
         android:layout_width="wrap_content"

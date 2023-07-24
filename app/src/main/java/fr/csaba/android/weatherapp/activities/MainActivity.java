@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import fr.csaba.android.weatherapp.Keys;
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
 
@@ -77,9 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickButtonFavorites(View view) {
-        String message = binding.editTextMessage.getText().toString();
         Intent intent = new Intent(this, FavoriteActivity.class);
-        intent.putExtra(Keys.MESSAGE_KEY, message);
         startActivity(intent);
     }
 }
