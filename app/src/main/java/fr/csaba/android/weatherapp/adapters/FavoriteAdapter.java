@@ -14,10 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.models.City;
+import fr.csaba.android.weatherapp.utils.Util;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     private Context mContext;
@@ -38,10 +40,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         City city = mCities.get(position);
-        holder.mImageViewWeatherIcon.setImageResource(city.mWeatherIcon);
+        holder.mImageViewWeatherIcon.setImageResource(Util.setWeatherIcon(city.mWeatherId));
         holder.mTextViewCityName.setText(city.mName);
         holder.mTextViewDescription.setText(city.mDescription);
-        holder.mTextViewTemperature.setText(city.mTemperature);
+        holder.mTextViewTemperature.setText(MessageFormat.format("{0}{1}", city.mTemperature, mContext.getString(R.string.celsius)));
         holder.mCity = city;
     }
 
@@ -77,11 +79,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
                 mCities.remove(mCity);
                 notifyDataSetChanged();
             };
-            builder.setPositiveButton("OK",  onClickListenerPositive);
-            DialogInterface.OnClickListener onClickListenerNegative = (dialogInterface, i) -> {
-                builder.create().cancel();
-            };
-            builder.setNegativeButton("Cancel", onClickListenerNegative);
+            builder.setPositiveButton(android.R.string.ok,  onClickListenerPositive);
+            builder.setNegativeButton(android.R.string.cancel, null);
 
             builder.setView(vRemove);
             builder.create().show();

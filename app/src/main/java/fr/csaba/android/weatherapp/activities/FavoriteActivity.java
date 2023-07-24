@@ -8,6 +8,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,12 +20,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.adapters.FavoriteAdapter;
 import fr.csaba.android.weatherapp.databinding.ActivityFavoriteBinding;
 import fr.csaba.android.weatherapp.models.City;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class FavoriteActivity extends AppCompatActivity {
 
@@ -32,19 +41,16 @@ public class FavoriteActivity extends AppCompatActivity {
     private ArrayList<City> mCities;
     private FavoriteAdapter mFavoriteAdapter;
 
+    private OkHttpClient mOkHttpClient;
+    private City mNewCity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mOkHttpClient = new OkHttpClient();
+
         mCities = new ArrayList<>();
-        City city1 = new City("Montréal", "Légères pluies", "22°C", R.drawable.weather_rainy_grey);
-        City city2 = new City("New York", "Ensoleillé", "22°C", R.drawable.weather_sunny_grey);
-        City city3 = new City("Paris", "Nuageux", "24°C", R.drawable.weather_foggy_grey);
-        City city4 = new City("Toulouse", "Pluies modérées", "20°C", R.drawable.weather_rainy_grey);
-        mCities.add(city1);
-        mCities.add(city2);
-        mCities.add(city3);
-        mCities.add(city4);
 
         binding = ActivityFavoriteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -61,16 +67,34 @@ public class FavoriteActivity extends AppCompatActivity {
             builder.setMessage("Here you can add a city");
             View v = LayoutInflater.from(this).inflate(R.layout.dialog_add_favorite, null);
             final EditText editTextCity = v.findViewById(R.id.edit_text_dialog_city);
-            @SuppressLint("NotifyDataSetChanged") DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
+            DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 String cityName = editTextCity.getText().toString();
-                mCities.add(new City(cityName, "Nuageux", "24°C", R.drawable.weather_foggy_grey));
-                mFavoriteAdapter.notifyDataSetChanged();
+                Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
+                mOkHttpClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        if (response.isSuccessful()) {
+                            assert response.body() != null;
+                            final String stringJson = response.body().string();
+                            runOnUiThread(() -> {
+                                try {
+                                    updateUI(stringJson);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+                            Log.d("TAG", stringJson);
+                        }
+                    }
+                });
             };
-            builder.setPositiveButton("OK",  onClickListenerPositive);
-            DialogInterface.OnClickListener onClickListenerNegative = (dialogInterface, i) -> {
-                builder.create().cancel();
-            };
-            builder.setNegativeButton("Cancel", onClickListenerNegative);
+            builder.setPositiveButton(android.R.string.ok, onClickListenerPositive);
+            builder.setNegativeButton(android.R.string.cancel, null);
 
             builder.setView(v);
             builder.create().show();
@@ -82,6 +106,12 @@ public class FavoriteActivity extends AppCompatActivity {
         binding.include.recyclerViewFavorites.setAdapter(mFavoriteAdapter);
 
         Log.d("TAG", "FavoriteActivity: onCreate()");
+    }
+
+    private void updateUI(String stringJson) throws JSONException {
+        mNewCity = new City(stringJson);
+        mCities.add(mNewCity);
+        mFavoriteAdapter.notifyItemInserted(mCities.size() - 1);
     }
 
     @Override
