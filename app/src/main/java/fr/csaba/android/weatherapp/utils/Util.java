@@ -1,5 +1,9 @@
 package fr.csaba.android.weatherapp.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import java.util.Date;
 
 import fr.csaba.android.weatherapp.R;
@@ -78,5 +82,11 @@ public class Util {
         }
 
         return icon;
+    }
+
+    public static boolean isActiveNetwork(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 }

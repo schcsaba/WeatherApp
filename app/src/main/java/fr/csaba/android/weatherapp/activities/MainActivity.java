@@ -3,10 +3,7 @@ package fr.csaba.android.weatherapp.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,9 +38,7 @@ public class MainActivity extends AppCompatActivity {
         binding.textViewNoInternet.setText(R.string.no_internet_connection);
         mOkHttpClient = new OkHttpClient();
 
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
+        if (Util.isActiveNetwork(this)) {
             Log.d("TAG", "Oui je suis connecté");
             binding.textViewNoInternet.setVisibility(View.INVISIBLE);
             Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?lat=47.390026&lon=0.688891&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
