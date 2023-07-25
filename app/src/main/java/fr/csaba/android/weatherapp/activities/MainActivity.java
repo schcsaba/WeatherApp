@@ -47,28 +47,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "Oui je suis connecté");
             binding.textViewNoInternet.setVisibility(View.INVISIBLE);
             Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?lat=47.390026&lon=0.688891&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
-            mOkHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    if (response.isSuccessful()) {
-                        assert response.body() != null;
-                        final String stringJson = response.body().string();
-                        runOnUiThread(() -> {
-                            try {
-                                updateUI(stringJson);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-                        Log.d("TAG", stringJson);
-                    }
-                }
-            });
+            getCityFromApi(request);
         } else {
             Log.d("TAG", "Non j'ai rien du tout");
             binding.linearLayoutHead.setVisibility(View.INVISIBLE);
@@ -76,6 +55,31 @@ public class MainActivity extends AppCompatActivity {
             binding.textViewNoInternet.setVisibility(View.VISIBLE);
         }
         Log.d("TAG", "MainActivity: onCreate()");
+    }
+
+    private void getCityFromApi(Request request) {
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    final String stringJson = response.body().string();
+                    runOnUiThread(() -> {
+                        try {
+                            updateUI(stringJson);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    Log.d("TAG", stringJson);
+                }
+            }
+        });
     }
 
     private void updateUI(String stringJson) throws JSONException {

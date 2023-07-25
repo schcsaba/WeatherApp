@@ -1,12 +1,10 @@
 package fr.csaba.android.weatherapp.activities;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -70,28 +68,7 @@ public class FavoriteActivity extends AppCompatActivity {
             DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 String cityName = editTextCity.getText().toString();
                 Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
-                mOkHttpClient.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        if (response.isSuccessful()) {
-                            assert response.body() != null;
-                            final String stringJson = response.body().string();
-                            runOnUiThread(() -> {
-                                try {
-                                    updateUI(stringJson);
-                                } catch (JSONException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                            Log.d("TAG", stringJson);
-                        }
-                    }
-                });
+                getCityFromApi(request);
             };
             builder.setPositiveButton(android.R.string.ok, onClickListenerPositive);
             builder.setNegativeButton(android.R.string.cancel, null);
@@ -106,6 +83,31 @@ public class FavoriteActivity extends AppCompatActivity {
         binding.include.recyclerViewFavorites.setAdapter(mFavoriteAdapter);
 
         Log.d("TAG", "FavoriteActivity: onCreate()");
+    }
+
+    private void getCityFromApi(Request request) {
+        mOkHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    assert response.body() != null;
+                    final String stringJson = response.body().string();
+                    runOnUiThread(() -> {
+                        try {
+                            updateUI(stringJson);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+                    Log.d("TAG", stringJson);
+                }
+            }
+        });
     }
 
     private void updateUI(String stringJson) throws JSONException {
