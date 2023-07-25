@@ -77,7 +77,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             @SuppressLint("InflateParams") View vRemove = LayoutInflater.from(mContext).inflate(R.layout.dialog_remove_favorite, null);
             @SuppressLint("NotifyDataSetChanged") DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 mCities.remove(mCity);
-                notifyDataSetChanged();
+                notifyItemRemoved(getAbsoluteAdapterPosition());
             };
             builder.setPositiveButton(android.R.string.ok,  onClickListenerPositive);
             builder.setNegativeButton(android.R.string.cancel, null);

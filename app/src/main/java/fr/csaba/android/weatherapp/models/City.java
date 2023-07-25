@@ -7,7 +7,6 @@ public class City {
     public String mName;
     public String mDescription;
     public String mTemperature;
-    public int mWeatherIcon;
     public int mIdCity;
     public double mLatitude;
     public double mLongitude;
