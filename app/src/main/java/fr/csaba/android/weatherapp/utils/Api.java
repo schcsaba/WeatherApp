@@ -4,8 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONException;
-
 import java.io.IOException;
 
 import fr.csaba.android.weatherapp.interfaces.UpdateUiFunction;
@@ -29,11 +27,7 @@ public class Api {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     final String stringJson = response.body().string();
-                    try {
-                        updateUiFunction.apply(stringJson);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
+                    updateUiFunction.apply(stringJson);
                     Log.d("TAG", stringJson);
                 }
             }
