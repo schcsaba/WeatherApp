@@ -5,15 +5,16 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import fr.csaba.android.weatherapp.R;
-import fr.csaba.android.weatherapp.models.City;
+import fr.csaba.android.weatherapp.models.CityGson;
 
 public class Util {
 
@@ -111,11 +112,13 @@ public class Util {
         return "";
     }
 
-    public static void saveFavoriteCities(Context context, ArrayList<City> cities) {
+    public static void saveFavoriteCities(Context context, ArrayList<CityGson> cities) {
         JSONArray jsonArrayCities = new JSONArray();
 
+        Gson gson = new Gson();
+
         for (int i = 0; i < cities.size(); i++) {
-            jsonArrayCities.put(cities.get(i).mStringJson);
+            jsonArrayCities.put(gson.toJson(cities.get(i)));
         }
 
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -124,14 +127,14 @@ public class Util {
         editor.apply();
     }
 
-    public static ArrayList<City> initFavoriteCities(Context context) {
-        ArrayList<City> cities = new ArrayList<>();
+    public static ArrayList<CityGson> initFavoriteCities(Context context) {
+        ArrayList<CityGson> cities = new ArrayList<>();
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Gson gson = new Gson();
         try {
             JSONArray jsonArray = new JSONArray(preferences.getString(PREFS_FAVORITE_CITIES, ""));
             for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObjectCity = new JSONObject(jsonArray.getString(i));
-                City city = new City(jsonObjectCity.toString());
+                CityGson city = gson.fromJson(jsonArray.getString(i), CityGson.class);
                 cities.add(city);
             }
         } catch (JSONException e) {

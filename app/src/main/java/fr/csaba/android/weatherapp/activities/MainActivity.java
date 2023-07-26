@@ -6,11 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import org.json.JSONException;
+import com.google.gson.Gson;
 
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
-import fr.csaba.android.weatherapp.models.City;
+import fr.csaba.android.weatherapp.models.CityGson;
 import fr.csaba.android.weatherapp.utils.Api;
 import fr.csaba.android.weatherapp.utils.Util;
 import okhttp3.Request;
@@ -18,7 +18,7 @@ import okhttp3.Request;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private City mCurrentCity;
+    private CityGson mCurrentCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +42,14 @@ public class MainActivity extends AppCompatActivity {
         Log.d("TAG", "MainActivity: onCreate()");
     }
 
-    private void updateUI(String stringJson) throws JSONException {
-        mCurrentCity = new City(stringJson);
+    private void updateUI(String stringJson) {
+        Gson gson = new Gson();
+        mCurrentCity = gson.fromJson(stringJson, CityGson.class);
         runOnUiThread(() -> {
-            binding.textViewCityName.setText(mCurrentCity.mName);
-            binding.textViewDescription.setText(mCurrentCity.mDescription);
-            binding.textViewTemperature.setText(mCurrentCity.mTemperature);
-            binding.imageViewWeatherIcon.setImageResource(mCurrentCity.mWeatherResIconWhite);
+            binding.textViewCityName.setText(mCurrentCity.getName());
+            binding.textViewDescription.setText(mCurrentCity.getWeather().get(0).getDescription());
+            binding.textViewTemperature.setText(String.format("%.0f", mCurrentCity.getMain().getTemp()) + " ℃");
+            binding.imageViewWeatherIcon.setImageResource(Util.setWeatherIcon(mCurrentCity.getWeather().get(0).getId(), mCurrentCity.getSys().getSunrise() * 1000, mCurrentCity.getSys().getSunset() * 1000));
         });
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,14 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.adapters.FavoriteAdapter;
 import fr.csaba.android.weatherapp.databinding.ActivityFavoriteBinding;
-import fr.csaba.android.weatherapp.models.City;
+import fr.csaba.android.weatherapp.models.CityGson;
 import fr.csaba.android.weatherapp.utils.Api;
 import fr.csaba.android.weatherapp.utils.Util;
 import okhttp3.Request;
@@ -32,9 +31,9 @@ import okhttp3.Request;
 public class FavoriteActivity extends AppCompatActivity {
 
     private ActivityFavoriteBinding binding;
-    private ArrayList<City> mCities;
+    private ArrayList<CityGson> mCities;
     private FavoriteAdapter mFavoriteAdapter;
-    private City mNewCity;
+    private CityGson mNewCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +76,9 @@ public class FavoriteActivity extends AppCompatActivity {
         Log.d("TAG", "FavoriteActivity: onCreate()");
     }
 
-    private void updateUI(String stringJson) throws JSONException {
-        mNewCity = new City(stringJson);
+    private void updateUI(String stringJson) {
+        Gson gson = new Gson();
+        mNewCity = gson.fromJson(stringJson, CityGson.class);
         mCities.add(mNewCity);
         Util.saveFavoriteCities(this, mCities);
         runOnUiThread(() -> mFavoriteAdapter.notifyItemInserted(mCities.size() - 1));
