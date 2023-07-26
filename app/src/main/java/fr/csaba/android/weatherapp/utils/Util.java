@@ -1,14 +1,24 @@
 package fr.csaba.android.weatherapp.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 import fr.csaba.android.weatherapp.R;
+import fr.csaba.android.weatherapp.models.City;
 
 public class Util {
+
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREFS_FAVORITE_CITIES = "favorite_cities";
 
     /*
      * Méthode qui initialise l'icon blanc présent dans la MainActivity
@@ -88,5 +98,45 @@ public class Util {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public static String capitalize(String s) {
+        if (s == null) return null;
+        if (s.length() == 1) {
+            return s.toUpperCase();
+        }
+        if (s.length() > 1) {
+            return s.substring(0, 1).toUpperCase() + s.substring(1);
+        }
+        return "";
+    }
+
+    public static void saveFavoriteCities(Context context, ArrayList<City> cities) {
+        JSONArray jsonArrayCities = new JSONArray();
+
+        for (int i = 0; i < cities.size(); i++) {
+            jsonArrayCities.put(cities.get(i).mStringJson);
+        }
+
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREFS_FAVORITE_CITIES, jsonArrayCities.toString());
+        editor.apply();
+    }
+
+    public static ArrayList<City> initFavoriteCities(Context context) {
+        ArrayList<City> cities = new ArrayList<>();
+        SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        try {
+            JSONArray jsonArray = new JSONArray(preferences.getString(PREFS_FAVORITE_CITIES, ""));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObjectCity = new JSONObject(jsonArray.getString(i));
+                City city = new City(jsonObjectCity.toString());
+                cities.add(city);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return cities;
     }
 }

@@ -29,7 +29,7 @@
             android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:textColor="@color/white"
-            android:text="@string/city_name"
+            tools:text="@string/city_name"
             android:textSize="36sp" />
 
         <TextView
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/city_desc"
+            tools:text="@string/city_desc"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -56,7 +56,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:contentDescription="@string/sun_icon"
-                android:src="@drawable/weather_sunny_white" />
+                tools:src="@drawable/weather_sunny_white" />
 
             <TextView
                 android:id="@+id/text_view_temperature"
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
                 android:gravity="end"
-                android:text="@string/city_temp"
+                tools:text="@string/city_temp"
                 android:textColor="@color/white"
                 android:textSize="60sp" />
         </LinearLayout>

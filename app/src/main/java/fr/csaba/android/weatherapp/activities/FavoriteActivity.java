@@ -26,6 +26,7 @@ import fr.csaba.android.weatherapp.adapters.FavoriteAdapter;
 import fr.csaba.android.weatherapp.databinding.ActivityFavoriteBinding;
 import fr.csaba.android.weatherapp.models.City;
 import fr.csaba.android.weatherapp.utils.Api;
+import fr.csaba.android.weatherapp.utils.Util;
 import okhttp3.Request;
 
 public class FavoriteActivity extends AppCompatActivity {
@@ -39,7 +40,7 @@ public class FavoriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mCities = new ArrayList<>();
+        mCities = Util.initFavoriteCities(this);
 
         binding = ActivityFavoriteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -79,6 +80,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private void updateUI(String stringJson) throws JSONException {
         mNewCity = new City(stringJson);
         mCities.add(mNewCity);
+        Util.saveFavoriteCities(this, mCities);
         runOnUiThread(() -> mFavoriteAdapter.notifyItemInserted(mCities.size() - 1));
 
     }

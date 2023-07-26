@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="88dp"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:background="?android:attr/selectableItemBackground">
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/text_view_city_name"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="16dp"
+        tools:text="@string/city_name"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_weather_icon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_description"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        android:layout_marginBottom="16dp"
+        tools:text="@string/city_desc"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_weather_icon"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_city_name"
+        app:layout_constraintVertical_bias="0.555" />
 
     <ImageView
         android:id="@+id/image_view_weather_icon"
-        android:layout_width="50dp"
+        android:layout_width="46dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_gravity="start"
-        android:src="@drawable/weather_sunny_white"
-        android:contentDescription="Weather icon" />
+        android:layout_marginEnd="24dp"
+        android:contentDescription="Weather icon"
+        tools:src="@drawable/weather_sunny_white"
+        app:layout_constraintEnd_toStartOf="@+id/text_view_temperature"
+        tools:layout_editor_absoluteY="0dp" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/text_view_temperature"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_weight="3"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/text_view_city_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/city_name"/>
-
-            <TextView
-                android:id="@+id/text_view_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/city_desc"/>
-        </LinearLayout>
-        <TextView
-            android:id="@+id/text_view_temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="@string/city_temp"/>
-    </LinearLayout>
-
-
-
-
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        tools:text="@string/city_temp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

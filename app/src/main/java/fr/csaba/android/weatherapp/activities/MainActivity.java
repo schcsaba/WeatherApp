@@ -1,15 +1,12 @@
 package fr.csaba.android.weatherapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
 import org.json.JSONException;
-
-import java.text.MessageFormat;
 
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
@@ -50,8 +47,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             binding.textViewCityName.setText(mCurrentCity.mName);
             binding.textViewDescription.setText(mCurrentCity.mDescription);
-            binding.textViewTemperature.setText(MessageFormat.format("{0}{1}", mCurrentCity.mTemperature, getString(R.string.celsius)));
-            binding.imageViewWeatherIcon.setImageResource(Util.setWeatherIcon(mCurrentCity.mWeatherId, mCurrentCity.mSunrise, mCurrentCity.mSunset));
+            binding.textViewTemperature.setText(mCurrentCity.mTemperature);
+            binding.imageViewWeatherIcon.setImageResource(mCurrentCity.mWeatherResIconWhite);
         });
     }
 

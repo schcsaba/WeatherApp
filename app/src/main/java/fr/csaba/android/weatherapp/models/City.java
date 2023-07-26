@@ -3,26 +3,35 @@ package fr.csaba.android.weatherapp.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fr.csaba.android.weatherapp.utils.Util;
+
 public class City {
-    public String mName;
-    public String mDescription;
-    public String mTemperature;
     public int mIdCity;
+    public String mName;
+    public String mCountry;
+    public int mWeatherResIconWhite;
+    public int mWeatherResIconGrey;
+    public String mTemperature;
+    public String mDescription;
     public double mLatitude;
     public double mLongitude;
-    public int mWeatherId;
-    public int mSunrise;
-    public int mSunset;
+    public String mStringJson;
 
     public City(String stringJson) throws JSONException {
+        mStringJson = stringJson;
         JSONObject json = new JSONObject(stringJson);
-        mName = json.getString("name");
-        mDescription = json.getJSONArray("weather").getJSONObject(0).getString("description");
-        mTemperature = json.getJSONObject("main").getString("temp");
+        JSONObject details = json.getJSONArray("weather").getJSONObject(0);
+        JSONObject main = json.getJSONObject("main");
+        JSONObject coord = json.getJSONObject("coord");
+
         mIdCity = json.getInt("id");
-        mLatitude = json.getJSONObject("coord").getDouble("lat");
-        mLongitude = json.getJSONObject("coord").getDouble("lon");
-        mWeatherId = json.getJSONArray("weather").getJSONObject(0).getInt("id");
-        mSunrise = json.getJSONObject("sys").getInt("sunrise");
+        mName = json.getString("name");
+        mCountry = json.getJSONObject("sys").getString("country");
+        mTemperature = String.format("%.0f", main.getDouble("temp")) + " ℃";
+        mDescription = Util.capitalize(details.getString("description"));
+        mWeatherResIconWhite = Util.setWeatherIcon(details.getInt("id"), json.getJSONObject("sys").getLong("sunrise") * 1000, json.getJSONObject("sys").getLong("sunset") * 1000);
+        mWeatherResIconGrey = Util.setWeatherIcon(details.getInt("id"));
+        mLatitude = coord.getDouble("lat");
+        mLongitude = coord.getDouble("lon");
     }
 }

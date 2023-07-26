@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 
 import fr.csaba.android.weatherapp.R;
@@ -40,10 +39,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         City city = mCities.get(position);
-        holder.mImageViewWeatherIcon.setImageResource(Util.setWeatherIcon(city.mWeatherId));
+        holder.mImageViewWeatherIcon.setImageResource(city.mWeatherResIconGrey);
         holder.mTextViewCityName.setText(city.mName);
         holder.mTextViewDescription.setText(city.mDescription);
-        holder.mTextViewTemperature.setText(MessageFormat.format("{0}{1}", city.mTemperature, mContext.getString(R.string.celsius)));
+        holder.mTextViewTemperature.setText(city.mTemperature);
         holder.mCity = city;
     }
 
@@ -77,6 +76,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             @SuppressLint("InflateParams") View vRemove = LayoutInflater.from(mContext).inflate(R.layout.dialog_remove_favorite, null);
             @SuppressLint("NotifyDataSetChanged") DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 mCities.remove(mCity);
+                Util.saveFavoriteCities(mContext, mCities);
                 notifyItemRemoved(getAbsoluteAdapterPosition());
             };
             builder.setPositiveButton(android.R.string.ok,  onClickListenerPositive);
