@@ -11,4 +11,5 @@
     <string name="large_text">Üzenet</string>
     <string name="action_settings">Beállítások</string>
     <string name="message">"Üzenet: "</string>
+    <string name="city_not_found">Ismeretlen város</string>
 </resources>

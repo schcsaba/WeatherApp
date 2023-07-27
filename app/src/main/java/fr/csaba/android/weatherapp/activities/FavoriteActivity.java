@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -59,7 +60,7 @@ public class FavoriteActivity extends AppCompatActivity {
             DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 String cityName = editTextCity.getText().toString();
                 Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
-                Api.getApiResponse(request, this::updateUI);
+                Api.getApiResponse(request, this::updateUI, this::updateUi404);
             };
             builder.setPositiveButton(android.R.string.ok, onClickListenerPositive);
             builder.setNegativeButton(android.R.string.cancel, null);
@@ -83,6 +84,10 @@ public class FavoriteActivity extends AppCompatActivity {
         Util.saveFavoriteCities(this, mCities);
         runOnUiThread(() -> mFavoriteAdapter.notifyItemInserted(mCities.size() - 1));
 
+    }
+
+    private void updateUi404() {
+        runOnUiThread(() -> Toast.makeText(getApplicationContext(), this.getText(R.string.city_not_found),Toast.LENGTH_SHORT).show());
     }
 
     @Override

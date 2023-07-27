@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "Oui je suis connecté");
             binding.textViewNoInternet.setVisibility(View.INVISIBLE);
             Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?lat=47.390026&lon=0.688891&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
-            Api.getApiResponse(request, this::updateUI);
+            Api.getApiResponse(request, this::updateUI, this::updateUi404);
         } else {
             Log.d("TAG", "Non j'ai rien du tout");
             binding.linearLayoutHead.setVisibility(View.INVISIBLE);
@@ -51,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
             binding.textViewTemperature.setText(String.format("%.0f", mCurrentCity.getMain().getTemp()) + " ℃");
             binding.imageViewWeatherIcon.setImageResource(Util.setWeatherIcon(mCurrentCity.getWeather().get(0).getId(), mCurrentCity.getSys().getSunrise() * 1000, mCurrentCity.getSys().getSunset() * 1000));
         });
+    }
+
+    private void updateUi404() {
+        runOnUiThread(() -> Toast.makeText(getApplicationContext(),this.getText(R.string.city_not_found),Toast.LENGTH_SHORT).show());
     }
 
     @Override

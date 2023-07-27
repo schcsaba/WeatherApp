@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 
 import fr.csaba.android.weatherapp.interfaces.UpdateUiFunction;
+import fr.csaba.android.weatherapp.interfaces.UpdateUiFunction404;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -14,7 +15,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class Api {
-    public static void getApiResponse(Request request, UpdateUiFunction<String> updateUiFunction) {
+    public static void getApiResponse(Request request, UpdateUiFunction<String> updateUiFunction, UpdateUiFunction404 updateUiFunction404) {
         OkHttpClient mOkHttpClient = new OkHttpClient();
         mOkHttpClient.newCall(request).enqueue(new Callback() {
             @Override
@@ -29,6 +30,8 @@ public class Api {
                     final String stringJson = response.body().string();
                     updateUiFunction.apply(stringJson);
                     Log.d("TAG", stringJson);
+                } else {
+                    updateUiFunction404.apply();
                 }
             }
         });
