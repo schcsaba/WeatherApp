@@ -1,7 +1,16 @@
 package fr.csaba.android.weatherapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +30,23 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private CityGson mCurrentCity;
 
+    private static final int REQUEST_CODE = 123;
+
+    private LocationManager mLocationManager;
+
+    private final LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            double lat = location.getLatitude();
+            double lon = location.getLongitude();
+            Log.d("TAG", "" + lat);
+            Log.d("TAG", "" + lon);
+            Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
+            Api.getApiResponse(request, MainActivity.this::updateUI, MainActivity.this::updateUi404);
+            mLocationManager.removeUpdates(mLocationListener);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +57,7 @@ public class MainActivity extends AppCompatActivity {
         if (Util.isActiveNetwork(this)) {
             Log.d("TAG", "Oui je suis connecté");
             binding.textViewNoInternet.setVisibility(View.INVISIBLE);
-            Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?lat=47.390026&lon=0.688891&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
-            Api.getApiResponse(request, this::updateUI, this::updateUi404);
+            startLocation();
         } else {
             Log.d("TAG", "Non j'ai rien du tout");
             binding.linearLayoutHead.setVisibility(View.INVISIBLE);
@@ -40,6 +65,19 @@ public class MainActivity extends AppCompatActivity {
             binding.textViewNoInternet.setVisibility(View.VISIBLE);
         }
         Log.d("TAG", "MainActivity: onCreate()");
+    }
+
+    private void startLocation() {
+        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = new String[]{
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE);
+        } else {
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+        }
     }
 
     private void updateUI(String stringJson) {
@@ -54,7 +92,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUi404() {
-        runOnUiThread(() -> Toast.makeText(getApplicationContext(),this.getText(R.string.city_not_found),Toast.LENGTH_SHORT).show());
+        runOnUiThread(() -> Toast.makeText(getApplicationContext(), this.getText(R.string.city_not_found), Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("TAG", "Permission granted");
+            } else {
+                Log.d("TAG", "Permission not granted");
+            }
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     @Override
