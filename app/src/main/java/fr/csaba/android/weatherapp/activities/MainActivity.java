@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.textViewCityName.setText(R.string.city_name);
         binding.textViewNoInternet.setText(R.string.no_internet_connection);
 
         if (Util.isActiveNetwork(this)) {
