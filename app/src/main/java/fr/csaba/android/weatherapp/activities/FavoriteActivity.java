@@ -66,8 +66,8 @@ public class FavoriteActivity extends AppCompatActivity {
         FloatingActionButton fab = binding.fab;
         fab.setOnClickListener(view -> {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Add a city");
-            builder.setMessage("Here you can add a city");
+            builder.setTitle(R.string.add_a_city);
+            builder.setMessage(R.string.here_you_can_add_a_city);
             View v = LayoutInflater.from(this).inflate(R.layout.dialog_add_favorite, null);
             final EditText editTextCity = v.findViewById(R.id.edit_text_dialog_city);
             DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {

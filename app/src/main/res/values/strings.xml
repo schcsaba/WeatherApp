@@ -13,4 +13,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="is_deleted">" is deleted"</string>
     <string name="search_icon">Search icon</string>
+    <string name="add_a_city">Add a city</string>
+    <string name="here_you_can_add_a_city">Here you can add a city</string>
 </resources>

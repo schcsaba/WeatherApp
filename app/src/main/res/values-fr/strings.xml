@@ -14,4 +14,6 @@
     <string name="title_activity_maps">Carte</string>
     <string name="is_deleted">" est supprimé"</string>
     <string name="search_icon">Icône de recherche</string>
+    <string name="add_a_city">Ajouter une ville</string>
+    <string name="here_you_can_add_a_city">Ici, vous pouvez ajouter une ville</string>
 </resources>

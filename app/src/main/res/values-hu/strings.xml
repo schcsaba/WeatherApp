@@ -14,4 +14,6 @@
     <string name="title_activity_maps">Térkép</string>
     <string name="is_deleted">" el lett távolítva"</string>
     <string name="search_icon">Keresés ikon</string>
+    <string name="add_a_city">Város hozzáadása</string>
+    <string name="here_you_can_add_a_city">Itt adhat hozzá egy várost</string>
 </resources>
