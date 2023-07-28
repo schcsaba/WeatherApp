@@ -5,10 +5,13 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,6 +85,27 @@ public class FavoriteActivity extends AppCompatActivity {
         binding.include.recyclerViewFavorites.setLayoutManager(layoutManager);
         mFavoriteAdapter = new FavoriteAdapter(this, mCities);
         binding.include.recyclerViewFavorites.setAdapter(mFavoriteAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAbsoluteAdapterPosition();
+                City city = mCities.remove(position);
+                Util.saveFavoriteCities(FavoriteActivity.this, mCities);
+                mFavoriteAdapter.notifyItemRemoved(position);
+                Snackbar.make(binding.coordinatorLayoutFavorites, city.getName() + getString(R.string.is_deleted), Snackbar.LENGTH_LONG).setAction(android.R.string.cancel, v -> {
+                    mCities.add(city);
+                    Util.saveFavoriteCities(FavoriteActivity.this, mCities);
+                    mFavoriteAdapter.notifyItemInserted(mCities.size() - 1);
+                }).show();
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(binding.include.recyclerViewFavorites);
 
         Log.d("TAG", "FavoriteActivity: onCreate()");
     }

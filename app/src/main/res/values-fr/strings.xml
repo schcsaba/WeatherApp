@@ -12,4 +12,6 @@
     <string name="city_not_found">La ville est introuvable</string>
     <string name="location_not_permitted">Localisation non autorisée.</string>
     <string name="title_activity_maps">Carte</string>
+    <string name="is_deleted">" est supprimé"</string>
+    <string name="search_icon">Icône de recherche</string>
 </resources>

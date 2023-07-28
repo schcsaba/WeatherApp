@@ -1,10 +1,7 @@
 package fr.csaba.android.weatherapp.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -53,7 +49,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         return mCities.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView mImageViewWeatherIcon;
         public TextView mTextViewCityName;
@@ -66,28 +62,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             mTextViewCityName = view.findViewById(R.id.text_view_city_name);
             mTextViewDescription = view.findViewById(R.id.text_view_description);
             mTextViewTemperature = view.findViewById(R.id.text_view_temperature);
-            view.setOnLongClickListener(this);
             view.setOnClickListener(this);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            Log.d("TAG", mCity.getName());
-            final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setTitle("Remove a city");
-            builder.setMessage("Do you really want to remove this city? " + mCity.getName());
-            @SuppressLint("InflateParams") View vRemove = LayoutInflater.from(mContext).inflate(R.layout.dialog_remove_favorite, null);
-            @SuppressLint("NotifyDataSetChanged") DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
-                mCities.remove(mCity);
-                Util.saveFavoriteCities(mContext, mCities);
-                notifyItemRemoved(getAbsoluteAdapterPosition());
-            };
-            builder.setPositiveButton(android.R.string.ok,  onClickListenerPositive);
-            builder.setNegativeButton(android.R.string.cancel, null);
-
-            builder.setView(vRemove);
-            builder.create().show();
-            return false;
         }
 
         @Override

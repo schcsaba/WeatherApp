@@ -11,4 +11,6 @@
     <string name="city_not_found">The city was not found</string>
     <string name="location_not_permitted">Location not permitted.</string>
     <string name="title_activity_maps">Map</string>
+    <string name="is_deleted">" is deleted"</string>
+    <string name="search_icon">Search icon</string>
 </resources>

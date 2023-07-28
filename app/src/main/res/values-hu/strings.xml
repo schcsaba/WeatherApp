@@ -12,4 +12,6 @@
     <string name="city_not_found">Ismeretlen város</string>
     <string name="location_not_permitted">A helymeghatározás nincs engedélyezve.</string>
     <string name="title_activity_maps">Térkép</string>
+    <string name="is_deleted">" el lett távolítva"</string>
+    <string name="search_icon">Keresés ikon</string>
 </resources>
