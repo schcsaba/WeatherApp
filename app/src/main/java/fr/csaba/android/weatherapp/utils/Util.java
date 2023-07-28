@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import fr.csaba.android.weatherapp.R;
-import fr.csaba.android.weatherapp.models.CityGson;
+import fr.csaba.android.weatherapp.models.City;
 
 public class Util {
 
@@ -112,7 +112,7 @@ public class Util {
         return "";
     }
 
-    public static void saveFavoriteCities(Context context, ArrayList<CityGson> cities) {
+    public static void saveFavoriteCities(Context context, ArrayList<City> cities) {
         JSONArray jsonArrayCities = new JSONArray();
 
         Gson gson = new Gson();
@@ -127,14 +127,14 @@ public class Util {
         editor.apply();
     }
 
-    public static ArrayList<CityGson> initFavoriteCities(Context context) {
-        ArrayList<CityGson> cities = new ArrayList<>();
+    public static ArrayList<City> initFavoriteCities(Context context) {
+        ArrayList<City> cities = new ArrayList<>();
         SharedPreferences preferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Gson gson = new Gson();
         try {
             JSONArray jsonArray = new JSONArray(preferences.getString(PREFS_FAVORITE_CITIES, ""));
             for (int i = 0; i < jsonArray.length(); i++) {
-                CityGson city = gson.fromJson(jsonArray.getString(i), CityGson.class);
+                City city = gson.fromJson(jsonArray.getString(i), City.class);
                 cities.add(city);
             }
         } catch (JSONException e) {

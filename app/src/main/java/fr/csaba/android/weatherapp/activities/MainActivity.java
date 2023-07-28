@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
-import fr.csaba.android.weatherapp.models.CityGson;
+import fr.csaba.android.weatherapp.models.City;
 import fr.csaba.android.weatherapp.utils.Api;
 import fr.csaba.android.weatherapp.utils.Util;
 import retrofit2.Call;
@@ -37,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
             double lon = location.getLongitude();
             Log.d("TAG", "" + lat);
             Log.d("TAG", "" + lon);
-            Call<CityGson> call = Api.service.getWeather(lat, lon, Api.UNITS, Api.LANG, Api.APPID);
+            Call<City> call = Api.service.getWeather(lat, lon, Api.UNITS, Api.LANG, Api.APPID);
             Api.callApi(call, MainActivity.this::updateUi);
             mLocationManager.removeUpdates(mLocationListener);
         }
     };
 
-    private void updateUi(@NonNull Response<CityGson> response) {
+    private void updateUi(@NonNull Response<City> response) {
         if (response.isSuccessful()) {
             binding.progressCircular.setVisibility(View.INVISIBLE);
             assert response.body() != null;

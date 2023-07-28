@@ -17,14 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import fr.csaba.android.weatherapp.R;
-import fr.csaba.android.weatherapp.models.CityGson;
+import fr.csaba.android.weatherapp.models.City;
 import fr.csaba.android.weatherapp.utils.Util;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     private Context mContext;
-    private ArrayList<CityGson> mCities;
+    private ArrayList<City> mCities;
 
-    public FavoriteAdapter(Context context, ArrayList<CityGson> cities) {
+    public FavoriteAdapter(Context context, ArrayList<City> cities) {
         mContext = context;
         mCities = cities;
     }
@@ -38,7 +38,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CityGson city = mCities.get(position);
+        City city = mCities.get(position);
         holder.mImageViewWeatherIcon.setImageResource(Util.setWeatherIcon(city.getWeather().get(0).getId()));
         holder.mTextViewCityName.setText(city.getName());
         holder.mTextViewDescription.setText(city.getWeather().get(0).getDescription());
@@ -57,7 +57,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         public TextView mTextViewCityName;
         public TextView mTextViewDescription;
         public TextView mTextViewTemperature;
-        public CityGson mCity;
+        public City mCity;
         public ViewHolder(View view) {
             super(view);
             mImageViewWeatherIcon = view.findViewById(R.id.image_view_weather_icon);
