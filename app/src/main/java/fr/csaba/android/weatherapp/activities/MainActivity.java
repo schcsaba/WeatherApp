@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
 import fr.csaba.android.weatherapp.models.City;
@@ -35,9 +37,8 @@ public class MainActivity extends AppCompatActivity {
         public void onLocationChanged(@NonNull Location location) {
             double lat = location.getLatitude();
             double lon = location.getLongitude();
-            Log.d("TAG", "" + lat);
-            Log.d("TAG", "" + lon);
-            Call<City> call = Api.service.getWeather(lat, lon, Api.UNITS, Api.LANG, Api.APPID);
+            Log.d("TAG", Locale.getDefault().getLanguage());
+            Call<City> call = Api.service.getWeather(lat, lon, Api.UNITS, Locale.getDefault().getLanguage(), Api.APPID);
             Api.callApi(call, MainActivity.this::updateUi);
             mLocationManager.removeUpdates(mLocationListener);
         }

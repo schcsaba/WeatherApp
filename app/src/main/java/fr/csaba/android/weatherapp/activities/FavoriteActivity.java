@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.adapters.FavoriteAdapter;
@@ -71,7 +72,7 @@ public class FavoriteActivity extends AppCompatActivity {
             final EditText editTextCity = v.findViewById(R.id.edit_text_dialog_city);
             DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 String cityName = editTextCity.getText().toString();
-                Call<City> call = Api.service.getWeather(cityName, Api.UNITS, Api.LANG, Api.APPID);
+                Call<City> call = Api.service.getWeather(cityName, Api.UNITS, Locale.getDefault().getLanguage(), Api.APPID);
                 Api.callApi(call, this::updateUI);
             };
             builder.setPositiveButton(android.R.string.ok, onClickListenerPositive);
