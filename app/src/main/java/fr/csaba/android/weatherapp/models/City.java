@@ -3,9 +3,10 @@ package fr.csaba.android.weatherapp.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class City {
+public class City implements Serializable {
 
     @SerializedName("coord")
     @Expose
@@ -175,7 +176,7 @@ public class City {
         this.cod = cod;
     }
 
-    public static class Clouds {
+    public static class Clouds implements Serializable {
 
         @SerializedName("all")
         @Expose
@@ -203,7 +204,7 @@ public class City {
 
     }
 
-    public static class Coord {
+    public static class Coord implements Serializable {
 
         @SerializedName("lon")
         @Expose
@@ -243,7 +244,7 @@ public class City {
 
     }
 
-    public static class Main {
+    public static class Main implements Serializable {
 
         @SerializedName("temp")
         @Expose
@@ -331,7 +332,7 @@ public class City {
 
     }
 
-    public static class Sys {
+    public static class Sys implements Serializable {
 
         @SerializedName("type")
         @Expose
@@ -407,7 +408,7 @@ public class City {
 
     }
 
-    public static class Weather {
+    public static class Weather implements Serializable {
 
         @SerializedName("id")
         @Expose
@@ -471,7 +472,7 @@ public class City {
 
     }
 
-    public static class Wind {
+    public static class Wind implements Serializable {
 
         @SerializedName("speed")
         @Expose

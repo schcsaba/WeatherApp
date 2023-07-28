@@ -3,6 +3,7 @@ package fr.csaba.android.weatherapp.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import fr.csaba.android.weatherapp.R;
+import fr.csaba.android.weatherapp.activities.MapsActivity;
 import fr.csaba.android.weatherapp.models.City;
 import fr.csaba.android.weatherapp.utils.Util;
 
@@ -51,7 +53,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
         return mCities.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
 
         public ImageView mImageViewWeatherIcon;
         public TextView mTextViewCityName;
@@ -65,6 +67,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             mTextViewDescription = view.findViewById(R.id.text_view_description);
             mTextViewTemperature = view.findViewById(R.id.text_view_temperature);
             view.setOnLongClickListener(this);
+            view.setOnClickListener(this);
         }
 
         @Override
@@ -85,6 +88,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHo
             builder.setView(vRemove);
             builder.create().show();
             return false;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(mContext, MapsActivity.class);
+            intent.putExtra("city", mCity);
+            mContext.startActivity(intent);
         }
     }
 }

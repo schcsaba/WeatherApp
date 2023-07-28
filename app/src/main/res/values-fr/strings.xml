@@ -11,4 +11,5 @@
     <string name="action_settings">Paramètres</string>
     <string name="city_not_found">La ville est introuvable</string>
     <string name="location_not_permitted">Localisation non autorisée.</string>
+    <string name="title_activity_maps">Carte</string>
 </resources>

@@ -4,11 +4,12 @@
     <string name="city_name">New York</string>
     <string name="city_desc">Napos</string>
     <string name="city_temp">24°C</string>
-    <string name="icon_description">Nap ikon</string>
+    <string name="icon_description">Időjárás ikon</string>
     <string name="favorites">Kedvencek</string>
     <string name="no_internet_connection">Nincs internet kapcsolat</string>
     <string name="title_activity_favorite">Kedvencek</string>
     <string name="action_settings">Beállítások</string>
     <string name="city_not_found">Ismeretlen város</string>
     <string name="location_not_permitted">A helymeghatározás nincs engedélyezve.</string>
+    <string name="title_activity_maps">Térkép</string>
 </resources>
