@@ -25,7 +25,6 @@ import fr.csaba.android.weatherapp.adapters.FavoriteAdapter;
 import fr.csaba.android.weatherapp.databinding.ActivityFavoriteBinding;
 import fr.csaba.android.weatherapp.models.CityGson;
 import fr.csaba.android.weatherapp.utils.Api;
-import fr.csaba.android.weatherapp.utils.ApiConstants;
 import fr.csaba.android.weatherapp.utils.Util;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -69,7 +68,7 @@ public class FavoriteActivity extends AppCompatActivity {
             final EditText editTextCity = v.findViewById(R.id.edit_text_dialog_city);
             DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 String cityName = editTextCity.getText().toString();
-                Call<CityGson> call = ApiConstants.service.getWeather(cityName, ApiConstants.UNITS, ApiConstants.LANG, ApiConstants.APPID);
+                Call<CityGson> call = Api.service.getWeather(cityName, Api.UNITS, Api.LANG, Api.APPID);
                 Api.callApi(call, this::updateUI);
             };
             builder.setPositiveButton(android.R.string.ok, onClickListenerPositive);

@@ -20,7 +20,6 @@ import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
 import fr.csaba.android.weatherapp.models.CityGson;
 import fr.csaba.android.weatherapp.utils.Api;
-import fr.csaba.android.weatherapp.utils.ApiConstants;
 import fr.csaba.android.weatherapp.utils.Util;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             double lon = location.getLongitude();
             Log.d("TAG", "" + lat);
             Log.d("TAG", "" + lon);
-            Call<CityGson> call = ApiConstants.service.getWeather(lat, lon, ApiConstants.UNITS, ApiConstants.LANG, ApiConstants.APPID);
+            Call<CityGson> call = Api.service.getWeather(lat, lon, Api.UNITS, Api.LANG, Api.APPID);
             Api.callApi(call, MainActivity.this::updateUi);
             mLocationManager.removeUpdates(mLocationListener);
         }
