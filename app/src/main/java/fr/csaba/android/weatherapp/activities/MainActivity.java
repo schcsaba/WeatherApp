@@ -16,22 +16,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import fr.csaba.android.weatherapp.R;
 import fr.csaba.android.weatherapp.databinding.ActivityMainBinding;
 import fr.csaba.android.weatherapp.models.CityGson;
 import fr.csaba.android.weatherapp.utils.Api;
+import fr.csaba.android.weatherapp.utils.ApiConstants;
 import fr.csaba.android.weatherapp.utils.Util;
-import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
-    private CityGson mCurrentCity;
-
     private static final int REQUEST_CODE = 123;
-
+    private ActivityMainBinding binding;
     private LocationManager mLocationManager;
 
     private final LocationListener mLocationListener = new LocationListener() {
@@ -41,34 +38,48 @@ public class MainActivity extends AppCompatActivity {
             double lon = location.getLongitude();
             Log.d("TAG", "" + lat);
             Log.d("TAG", "" + lon);
-            Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
-            Api.getApiResponse(request, MainActivity.this::updateUI, MainActivity.this::updateUi404);
+            Call<CityGson> call = ApiConstants.service.getWeather(lat, lon, ApiConstants.UNITS, ApiConstants.LANG, ApiConstants.APPID);
+            Api.callApi(call, MainActivity.this::updateUi);
             mLocationManager.removeUpdates(mLocationListener);
         }
     };
+
+    private void updateUi(@NonNull Response<CityGson> response) {
+        if (response.isSuccessful()) {
+            binding.progressCircular.setVisibility(View.INVISIBLE);
+            assert response.body() != null;
+            binding.textViewCityName.setText(response.body().getName());
+            binding.textViewDescription.setText(response.body().getWeather().get(0).getDescription());
+            binding.textViewTemperature.setText(String.format("%.0f", response.body().getMain().getTemp()) + " ℃");
+            binding.imageViewWeatherIcon.setImageResource(Util.setWeatherIcon(response.body().getWeather().get(0).getId(), response.body().getSys().getSunrise() * 1000, response.body().getSys().getSunset() * 1000));
+        } else {
+            Toast.makeText(getApplicationContext(), this.getText(R.string.city_not_found), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.textViewNoInternet.setText(R.string.no_internet_connection);
+        binding.progressCircular.setVisibility(View.INVISIBLE);
+        binding.textViewErrorMessage.setVisibility(View.INVISIBLE);
 
         if (Util.isActiveNetwork(this)) {
             Log.d("TAG", "Oui je suis connecté");
-            binding.textViewNoInternet.setVisibility(View.INVISIBLE);
+            binding.progressCircular.setVisibility(View.VISIBLE);
             startLocation();
         } else {
             Log.d("TAG", "Non j'ai rien du tout");
             binding.linearLayoutHead.setVisibility(View.INVISIBLE);
             binding.buttonFavorites.setVisibility(View.INVISIBLE);
-            binding.textViewNoInternet.setVisibility(View.VISIBLE);
+            binding.textViewErrorMessage.setText(R.string.no_internet_connection);
+            binding.textViewErrorMessage.setVisibility(View.VISIBLE);
         }
         Log.d("TAG", "MainActivity: onCreate()");
     }
 
     private void startLocation() {
-        mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = new String[]{
                     Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -76,23 +87,9 @@ public class MainActivity extends AppCompatActivity {
             };
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE);
         } else {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+            mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, mLocationListener);
         }
-    }
-
-    private void updateUI(String stringJson) {
-        Gson gson = new Gson();
-        mCurrentCity = gson.fromJson(stringJson, CityGson.class);
-        runOnUiThread(() -> {
-            binding.textViewCityName.setText(mCurrentCity.getName());
-            binding.textViewDescription.setText(mCurrentCity.getWeather().get(0).getDescription());
-            binding.textViewTemperature.setText(String.format("%.0f", mCurrentCity.getMain().getTemp()) + " ℃");
-            binding.imageViewWeatherIcon.setImageResource(Util.setWeatherIcon(mCurrentCity.getWeather().get(0).getId(), mCurrentCity.getSys().getSunrise() * 1000, mCurrentCity.getSys().getSunset() * 1000));
-        });
-    }
-
-    private void updateUi404() {
-        runOnUiThread(() -> Toast.makeText(getApplicationContext(), this.getText(R.string.city_not_found), Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -100,8 +97,12 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d("TAG", "Permission granted");
+                startLocation();
             } else {
                 Log.d("TAG", "Permission not granted");
+                binding.progressCircular.setVisibility(View.INVISIBLE);
+                binding.textViewErrorMessage.setText(R.string.location_not_permitted);
+                binding.textViewErrorMessage.setVisibility(View.VISIBLE);
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);

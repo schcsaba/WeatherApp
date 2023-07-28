@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,15 +25,26 @@ import fr.csaba.android.weatherapp.adapters.FavoriteAdapter;
 import fr.csaba.android.weatherapp.databinding.ActivityFavoriteBinding;
 import fr.csaba.android.weatherapp.models.CityGson;
 import fr.csaba.android.weatherapp.utils.Api;
+import fr.csaba.android.weatherapp.utils.ApiConstants;
 import fr.csaba.android.weatherapp.utils.Util;
-import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class FavoriteActivity extends AppCompatActivity {
 
     private ActivityFavoriteBinding binding;
     private ArrayList<CityGson> mCities;
     private FavoriteAdapter mFavoriteAdapter;
-    private CityGson mNewCity;
+
+    private void updateUI(Response<CityGson> response) {
+        if (response.isSuccessful()) {
+            mCities.add(response.body());
+            Util.saveFavoriteCities(this, mCities);
+            mFavoriteAdapter.notifyItemInserted(mCities.size() - 1);
+        } else {
+            Toast.makeText(getApplicationContext(), this.getText(R.string.city_not_found), Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +69,8 @@ public class FavoriteActivity extends AppCompatActivity {
             final EditText editTextCity = v.findViewById(R.id.edit_text_dialog_city);
             DialogInterface.OnClickListener onClickListenerPositive = (dialogInterface, i) -> {
                 String cityName = editTextCity.getText().toString();
-                Request request = new Request.Builder().url("https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=01897e497239c8aff78d9b8538fb24ea&units=metric&lang=fr").build();
-                Api.getApiResponse(request, this::updateUI, this::updateUi404);
+                Call<CityGson> call = ApiConstants.service.getWeather(cityName, ApiConstants.UNITS, ApiConstants.LANG, ApiConstants.APPID);
+                Api.callApi(call, this::updateUI);
             };
             builder.setPositiveButton(android.R.string.ok, onClickListenerPositive);
             builder.setNegativeButton(android.R.string.cancel, null);
@@ -75,19 +85,6 @@ public class FavoriteActivity extends AppCompatActivity {
         binding.include.recyclerViewFavorites.setAdapter(mFavoriteAdapter);
 
         Log.d("TAG", "FavoriteActivity: onCreate()");
-    }
-
-    private void updateUI(String stringJson) {
-        Gson gson = new Gson();
-        mNewCity = gson.fromJson(stringJson, CityGson.class);
-        mCities.add(mNewCity);
-        Util.saveFavoriteCities(this, mCities);
-        runOnUiThread(() -> mFavoriteAdapter.notifyItemInserted(mCities.size() - 1));
-
-    }
-
-    private void updateUi404() {
-        runOnUiThread(() -> Toast.makeText(getApplicationContext(), this.getText(R.string.city_not_found),Toast.LENGTH_SHORT).show());
     }
 
     @Override

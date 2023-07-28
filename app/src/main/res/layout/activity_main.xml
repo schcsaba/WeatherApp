@@ -6,10 +6,16 @@
     tools:context=".activities.MainActivity">
 
     <TextView
-        android:id="@+id/text_view_no_internet"
+        android:id="@+id/text_view_error_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
+
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
 
     <LinearLayout
         android:id="@+id/linear_layout_head"
@@ -55,7 +61,7 @@
                 android:id="@+id/image_view_weather_icon"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:contentDescription="@string/sun_icon"
+                android:contentDescription="@string/icon_description"
                 tools:src="@drawable/weather_sunny_white" />
 
             <TextView
